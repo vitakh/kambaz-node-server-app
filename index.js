@@ -39,7 +39,10 @@ const corsOptions = {
 };
  
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
  
 app.set("trust proxy", 1);
  
@@ -61,7 +64,6 @@ const sessionOptions = {
 };
  
 app.use(session(sessionOptions));
- 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
  
