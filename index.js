@@ -3,14 +3,14 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
  
-import * as db from "./Database/index.js";
-import UserRoutes from "./routes/users.js";
-import CourseRoutes from "./routes/courses.js";
-import ModulesRoutes from "./routes/modules.js";
-import EnrollmentRoutes from "./routes/enrollments.js";
-import AssignmentsRoutes from "./routes/assignments.js";
-import Lab5 from "./routes/lab5.js";
-import Hello from "./routes/hello.js";
+import * as db from "./Kambaz/Database/index.js";
+import UserRoutes from "./Kambaz/Users/routes.js";
+import CourseRoutes from "./Kambaz/Courses/routes.js";
+import ModulesRoutes from "./Kambaz/Modules/routes.js";
+import EnrollmentRoutes from "./Kambaz/Enrollments/routes.js";
+import AssignmentsRoutes from "./Kambaz/Assignments/routes.js";
+import Lab5 from "./Lab5/index.js";
+import Hello from "./Hello.js";
  
 const app = express();
 const PORT = process.env.PORT || 4000;
