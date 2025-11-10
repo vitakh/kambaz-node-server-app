@@ -25,7 +25,11 @@ export default function UserRoutes(app, db) {
         { message: "Username already in use" });
       return;
     }
-    const currentUser = dao.createUser(req.body);
+    const newUser = {
+      ...req.body,
+      role: req.body.role || "STUDENT",
+    };
+    const currentUser = dao.createUser(newUser);
     req.session["currentUser"] = currentUser;
     res.json(currentUser);
   };
@@ -56,6 +60,10 @@ export default function UserRoutes(app, db) {
     }
     res.json(currentUser);
   };
+
+   app.get("/api/users/current", (req, res) => {
+    res.json(req.session.currentUser ?? null);
+  });
 
 
   app.post("/api/users", createUser);

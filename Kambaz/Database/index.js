@@ -5,4 +5,12 @@ import users from "./users.js";
 //import grades from "./grades.js";
 import enrollments from "./enrollments.js";
 
-export default { courses, modules, assignments, users, enrollments };
+const db = {
+  courses:     Array.isArray(courses)     ? courses     : [],
+  modules:     Array.isArray(modules)     ? modules     : [],
+  assignments: Array.isArray(assignments) ? assignments : [],
+  users:       Array.isArray(users)       ? users       : [],
+  enrollments: Array.isArray(enrollments) ? enrollments : [],
+};
+ 
+export default db;

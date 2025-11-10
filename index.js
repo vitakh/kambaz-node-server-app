@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
  
-import * as db from "./Kambaz/Database/index.js";
+import  db from "./Kambaz/Database/index.js";
 import UserRoutes from "./Kambaz/Users/routes.js";
 import CourseRoutes from "./Kambaz/Courses/routes.js";
 import ModulesRoutes from "./Kambaz/Modules/routes.js";
@@ -15,7 +15,7 @@ import Hello from "./Hello.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
  
-const allowlist = (process.env.CLIENT_URLS ?? process.env.CLIENT_URL ?? "")
+const allowlist = (process.env.CLIENT_URLS ?? process.env.CLIENT_URL ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:3000"))
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
@@ -38,12 +38,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
  
-app.use(cors(corsOptions));
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") return res.sendStatus(204);
-  next();
-});
- 
 app.set("trust proxy", 1);
  
 const isProd =
@@ -52,7 +46,8 @@ const isProd =
  
 const cookieConfig = {
   sameSite: isProd ? "none" : "lax",
-  secure: isProd,
+  secure: isProd,        // only true in production
+  httpOnly: true,
 };
  
 const sessionOptions = {
@@ -62,7 +57,8 @@ const sessionOptions = {
   proxy: isProd,
   cookie: cookieConfig,
 };
- 
+
+app.use(cors(corsOptions));
 app.use(session(sessionOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -81,3 +77,4 @@ app.listen(PORT, () => {
   console.log(`API listening on :${PORT}`);
   console.log("Allowed origins:", allowlist);
 });
+ 
