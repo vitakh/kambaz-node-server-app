@@ -46,7 +46,7 @@ const isProd =
  
 const cookieConfig = {
   sameSite: isProd ? "none" : "lax",
-  secure: isProd,        // only true in production
+  secure: isProd,
   httpOnly: true,
 };
  
