@@ -1,7 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-export default function CoursesDao(db) {
+import model from "./model.js";
+import db from "../Database/index.js";
+
+export default function CoursesDao() {
+ 
   function findAllCourses() {
-    return db.courses;
+    return model.find();
   }
 
   function findCoursesForEnrolledUser(userId) {
@@ -11,27 +15,18 @@ export default function CoursesDao(db) {
   return enrolledCourses;
 }
 
-function createCourse(course, ownerId) {
-  const newCourse = { ...course, _id: uuidv4(), ownerId: ownerId};
-  db.courses = [...db.courses, newCourse];
-  return newCourse;
+function createCourse(course) {
+  const newCourse = { ...course, _id: uuidv4()};
+  return model.create(newCourse);
 }
 
 function deleteCourse(courseId) {
-    const { courses, enrollments } = db;
-    db.courses = courses.filter((course) => course._id !== courseId);
-    db.enrollments = enrollments.filter(
-      (enrollment) => enrollment.course !== courseId
-  );
+    return model.deleteOne({_id: courseId});
 }
 
 function updateCourse(courseId, courseUpdates) {
-  const { courses } = db;
-  const course = courses.find((course) => course._id === courseId);
-  Object.assign(course, courseUpdates);
-  return course;
+  return model.updateOne({_id: courseId}, {$set: courseUpdates});
 }
 
-
-  return { findAllCourses, findCoursesForEnrolledUser, createCourse, deleteCourse, updateCourse};
+return { findAllCourses, findCoursesForEnrolledUser, createCourse, deleteCourse, updateCourse};
 }

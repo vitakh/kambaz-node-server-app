@@ -1,5 +1,7 @@
 import "dotenv/config";
 import express from "express";
+import mongoose from "mongoose";
+
 import cors from "cors";
 import session from "express-session";
  
@@ -11,7 +13,9 @@ import EnrollmentRoutes from "./Kambaz/Enrollments/routes.js";
 import AssignmentsRoutes from "./Kambaz/Assignments/routes.js";
 import Lab5 from "./Lab5/index.js";
 import Hello from "./Hello.js";
- 
+
+const CONNECTION_STRING = process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
+mongoose.connect(CONNECTION_STRING);
 const app = express();
 const PORT = process.env.PORT || 4000;
  
@@ -65,11 +69,11 @@ app.use(express.urlencoded({ extended: true }));
  
 app.get("/healthz", (_req, res) => res.status(200).send("ok"));
  
-UserRoutes(app, db);
-CourseRoutes(app, db);
-ModulesRoutes(app, db);
-EnrollmentRoutes(app, db);
-AssignmentsRoutes(app, db);
+UserRoutes(app);
+CourseRoutes(app);
+ModulesRoutes(app);
+EnrollmentRoutes(app);
+AssignmentsRoutes(app);
 Lab5(app);
 Hello(app);
  
